@@ -18,6 +18,9 @@ else
     echo "🦙 Ollama já está rodando."
 fi
 
+echo "🦙 Verificando modelo de IA (nomic-embed-text)..."
+ollama pull nomic-embed-text
+
 # 1. Banco de Dados (Docker)
 
 echo "📦 Subindo containers (MongoDB)..."
