@@ -33,34 +33,43 @@ O IntelliChain IP utiliza uma abordagem híbrida:
 
 ---
 
-## 🚦 Como Rodar o Projeto
+## 🚦 Como Rodar o Projeto (Quick Start)
+
+Para facilitar a execução, o projeto conta com um script de automação que inicia todos os serviços (Frontend, Backend e Blockchain) simultaneamente:
+
+1. **Inicie o ambiente completo**:
+   ```bash
+   chmod +x start.sh
+   ./start.sh
+   ```
+
+Este comando irá:
+- Iniciar o validador local da Solana.
+- Subir o servidor de API FastAPI (Backend).
+- Iniciar o ambiente de desenvolvimento Next.js (Frontend).
+- (Certifique-se de que o MongoDB já esteja rodando em sua máquina).
+
+---
+
+## 🔧 Configuração Manual (Se necessário)
+
+Se preferir rodar cada componente individualmente:
 
 ### Backend (Python)
-1. Certifique-se de ter o MongoDB rodando (`localhost:27017`).
-2. Instale as dependências:
-   ```bash
-   cd backend
-   pip install fastapi uvicorn motor pymongo
-   ```
-3. Inicie o servidor:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
+```bash
+cd backend && uvicorn app.main:app --reload
+```
 
 ### Frontend (Next.js)
-1. Instale as dependências:
-   ```bash
-   cd frontend
-   npm install
-   ```
-2. Inicie o ambiente de desenvolvimento:
-   ```bash
-   npm run dev
-   ```
+```bash
+cd frontend && npm run dev
+```
 
 ### Blockchain (Solana Local)
-1. Inicie o validador: `solana-test-validator`
-2. Faça o deploy do contrato: `anchor deploy`
+```bash
+solana-test-validator
+anchor deploy
+```
 
 ---
 
