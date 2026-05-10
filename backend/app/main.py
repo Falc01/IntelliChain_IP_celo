@@ -28,7 +28,11 @@ app = FastAPI(
 # Configuração do CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Permite o Vercel e o localhost
+    allow_origins=[
+        "http://localhost:3000",
+        "https://intellichain-ip.vercel.app",
+        "https://intellichain-hmmx5idhp-patent-chain.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"], # Permite todos os métodos (GET, POST, etc)
     allow_headers=["*"], # Permite todos os cabeçalhos
