@@ -15,7 +15,8 @@ export const IPForm = () => {
     const { connection } = useConnection();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [status, setStatus] = useState<'idle' | 'analyzing' | 'approved' | 'pending' | 'error' | 'registering' | 'success'>('idle');
+    const [status, setStatus] = useState<'idle' | 'analyzing' | 'approved' | 'pending' | 'error' | 'success'>('idle');
+    const [isRegistering, setIsRegistering] = useState(false);
     const [similarity, setSimilarity] = useState<number | null>(null);
     const [contentHash, setContentHash] = useState<string>('');
     const [txHash, setTxHash] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export const IPForm = () => {
             });
 
             const data = await response.json();
-            setAnalysisData(data); // Guarda tudo para o momento do clique no botão Pagar
+            setAnalysisData(data);
 
             if (data.status === 'APPROVED') {
                 setStatus('approved');
@@ -67,9 +68,8 @@ export const IPForm = () => {
         if (!publicKey || !signTransaction || !analysisData) return;
         
         try {
-            setStatus('registering');
+            setIsRegistering(true);
 
-            // 1. Seguir com a transação na Solana PRIMEIRO
             const provider = new AnchorProvider(connection, wallet as any, { preflightCommitment: "processed" });
             const program = new Program(idl as any, provider);
             const copyrightAccount = web3.Keypair.generate();
@@ -87,7 +87,6 @@ export const IPForm = () => {
             console.log("Transação confirmada na Solana:", tx);
             setTxHash(tx);
 
-            // 2. AGORA SIM, criar o registro no MongoDB com o hash real
             await fetch('http://localhost:8000/confirm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -96,7 +95,7 @@ export const IPForm = () => {
                     content: analysisData.content,
                     embedding: analysisData.embedding,
                     similarity_score: analysisData.similarity_score,
-                    tx_hash: tx // O hash real da blockchain
+                    tx_hash: tx
                 })
             });
 
@@ -104,7 +103,9 @@ export const IPForm = () => {
         } catch (error) {
             console.error("Erro na transação:", error);
             alert("Erro ao registrar na Solana. Verifique seu saldo ou o Phantom.");
-            setStatus('approved'); // Volta para o estado de aprovação para tentar de novo
+            setStatus('approved');
+        } finally {
+            setIsRegistering(false);
         }
     };
 
@@ -225,11 +226,11 @@ export const IPForm = () => {
                             </p>
                             <button 
                                 onClick={registerOnChain}
-                                disabled={status === 'registering'}
+                                disabled={isRegistering}
                                 className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all flex justify-center items-center gap-2"
                             >
-                                {status === 'registering' ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-                                {status === 'registering' ? 'Aprovando Transação...' : 'Registrar na Solana (0.002 SOL)'}
+                                {isRegistering ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
+                                {isRegistering ? 'Aprovando Transação...' : 'Registrar na Solana (0.002 SOL)'}
                             </button>
                         </motion.div>
                     )}
@@ -250,11 +251,11 @@ export const IPForm = () => {
                             </p>
                             <button 
                                 onClick={registerOnChain}
-                                disabled={status === 'registering'}
+                                disabled={isRegistering}
                                 className="w-full bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all flex justify-center items-center gap-2"
                             >
-                                {status === 'registering' ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-                                {status === 'registering' ? 'Gerando registro pendente...' : 'Pagar taxa e enviar para Auditoria (0.002 SOL)'}
+                                {isRegistering ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
+                                {isRegistering ? 'Gerando registro pendente...' : 'Pagar taxa e enviar para Auditoria (0.002 SOL)'}
                             </button>
                         </motion.div>
                     )}
