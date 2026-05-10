@@ -6,8 +6,10 @@ import { Upload, CheckCircle2, AlertCircle, Loader2, FileText, Fingerprint } fro
 import { motion, AnimatePresence } from 'framer-motion';
 import { Program, AnchorProvider, web3 } from '@coral-xyz/anchor';
 import idl from '../config/idl.json';
+import { useLanguage } from '../context/LanguageContext';
 
 export const IPForm = () => {
+    const { t } = useLanguage();
     const wallet = useWallet();
     const { connected, publicKey, signTransaction } = wallet;
     const { connection } = useConnection();
@@ -114,8 +116,8 @@ export const IPForm = () => {
                         <FileText className="w-6 h-6 text-indigo-400" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-white">Novo Registro de IP</h2>
-                        <p className="text-sm text-gray-400">Preencha os dados da sua criação para análise.</p>
+                        <h2 className="text-xl font-bold text-white">{t.form.title}</h2>
+                        <p className="text-sm text-gray-400">{t.form.subtitle}</p>
                     </div>
                 </div>
 
@@ -131,11 +133,11 @@ export const IPForm = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Título do IP</label>
+                        <label className="text-sm font-medium text-gray-300">{t.form.labelTitle}</label>
                         <input
                             type="text"
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
-                            placeholder="Ex: Novo Algoritmo de Compressão"
+                            placeholder={t.form.placeholderTitle}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             disabled={status !== 'idle' && status !== 'error'}
@@ -144,10 +146,10 @@ export const IPForm = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Conteúdo do IP</label>
+                        <label className="text-sm font-medium text-gray-300">{t.form.labelContent}</label>
                         <textarea
                             className="w-full h-40 bg-black/40 border border-white/10 rounded-xl p-4 text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none"
-                            placeholder="Descreva sua patente, música, código ou obra de arte detalhadamente..."
+                            placeholder={t.form.placeholderContent}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             disabled={status !== 'idle' && status !== 'error'}
@@ -159,24 +161,24 @@ export const IPForm = () => {
                         <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3">
                             <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                             <p className="text-sm text-amber-200/80">
-                                Conecte sua carteira Solana para poder realizar o registro definitivo na blockchain.
+                                {t.form.msgConnect}
                             </p>
                         </div>
                     ) : (
                         <button
                             type="submit"
-                            disabled={status !== 'idle' && status !== 'error' || !content}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
+                            disabled={status === 'analyzing'}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {status === 'analyzing' ? (
                                 <>
                                     <Loader2 className="w-5 h-5 animate-spin" />
-                                    Analisando com IA...
+                                    {t.form.status.analyzing}
                                 </>
                             ) : (
                                 <>
-                                    <Fingerprint className="w-5 h-5" />
-                                    Verificar Unicidade
+                                    <Upload className="w-5 h-5" />
+                                    {t.form.btnAnalyze}
                                 </>
                             )}
                         </button>

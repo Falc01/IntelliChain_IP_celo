@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: "Proteja sua criação na Solana com validação inteligente por IA.",
 };
 
+import { LanguageProvider } from "./context/LanguageContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full">
       <body className={`${inter.className} bg-[#0a0a0b] text-gray-100 min-h-full flex flex-col antialiased`}>
-        <WalletContextProvider>
-          {children}
-        </WalletContextProvider>
+        <LanguageProvider>
+          <WalletContextProvider>
+            {children}
+          </WalletContextProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

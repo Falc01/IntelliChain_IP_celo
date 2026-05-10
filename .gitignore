@@ -6,3 +6,12 @@ node_modules
 test-ledger
 .yarn
 .surfpool
+
+# Backend (Python / FastAPI)
+backend/venv/
+backend/__pycache__/
+backend/.env
+*.pyc
+
+# OS Files
+Thumbs.db

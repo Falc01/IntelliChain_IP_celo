@@ -13,7 +13,7 @@ if ! pgrep -x "ollama" > /dev/null
 then
     echo "🦙 Iniciando Ollama..."
     ollama serve &
-    sleep 2
+    sleep 5
 else
     echo "🦙 Ollama já está rodando."
 fi

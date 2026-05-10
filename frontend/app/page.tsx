@@ -1,8 +1,13 @@
+"use client";
+
 import { Navbar } from "./components/Navbar";
 import { IPForm } from "./components/IPForm";
 import { ShieldCheck, Zap, Globe } from "lucide-react";
+import { useLanguage } from "./context/LanguageContext";
 
 export default function Home() {
+  const { t } = useLanguage();
+
   return (
     <main className="flex-1 flex flex-col">
       <Navbar />
@@ -11,11 +16,10 @@ export default function Home() {
       <section className="pt-20 pb-16 px-4">
         <div className="max-w-7xl mx-auto text-center space-y-6">
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-white">
-            Proteja sua <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">Genialidade</span>
+            {t.hero.title1} <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">{t.hero.title2}</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-            O primeiro sistema de registro de IP na Solana com validação por IA. 
-            Seguro, imutável e inteligente.
+            {t.hero.subtitle}
           </p>
           
           <div className="flex flex-wrap justify-center gap-8 pt-10 text-gray-500">
