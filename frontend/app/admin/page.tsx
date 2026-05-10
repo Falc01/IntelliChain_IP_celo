@@ -6,6 +6,8 @@ import { ShieldAlert, Check, X, Database, UserCheck, Loader2 } from 'lucide-reac
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from '../components/Navbar';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 const ADMIN_WHITELIST = [
     "J3fSndN8Y7F8f2vFvG1Hh3J4k5L6m7N8P9q0R1s2T3u", // Substitua pela sua carteira real
     "6uP97n5Wv35v868xX8668v6v8v6v8v6v8v6v8v6v8v6v"  // Outra carteira de admin
@@ -20,7 +22,7 @@ export default function AdminPage() {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8000/admin/pending');
+            const response = await fetch(`${API_URL}/admin/pending`);
             const data = await response.json();
             setRequests(data);
         } catch (error) {
@@ -38,7 +40,7 @@ export default function AdminPage() {
 
     const resolveRequest = async (id: string, decision: 'APPROVED' | 'REJECTED') => {
         try {
-            const response = await fetch(`http://localhost:8000/admin/resolve?request_id=${id}&decision=${decision}`, {
+            const response = await fetch(`${API_URL}/admin/resolve?request_id=${id}&decision=${decision}`, {
                 method: 'POST'
             });
             const data = await response.json();

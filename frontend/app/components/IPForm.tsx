@@ -8,6 +8,8 @@ import { Program, AnchorProvider, web3 } from '@coral-xyz/anchor';
 import idl from '../config/idl.json';
 import { useLanguage } from '../context/LanguageContext';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export const IPForm = () => {
     const { t } = useLanguage();
     const wallet = useWallet();
@@ -32,7 +34,7 @@ export const IPForm = () => {
         setContentHash(generatedHash);
 
         try {
-            const response = await fetch('http://localhost:8000/verify', {
+            const response = await fetch(`${API_URL}/verify`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -87,7 +89,8 @@ export const IPForm = () => {
             console.log("Transação confirmada na Solana:", tx);
             setTxHash(tx);
 
-            await fetch('http://localhost:8000/confirm', {
+            // 2. AGORA SIM, criar o registro no MongoDB com o hash real
+            await fetch(`${API_URL}/confirm`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
