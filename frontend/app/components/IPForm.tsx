@@ -1,20 +1,18 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useWallet, useConnection } from '@solana/wallet-adapter-react';
-import { Upload, CheckCircle2, AlertCircle, Loader2, FileText, Fingerprint } from 'lucide-react';
+import { Upload, CheckCircle2, AlertCircle, Loader2, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Program, AnchorProvider, web3 } from '@coral-xyz/anchor';
-import idl from '../config/idl.json';
+import { useWeb3 } from './WalletContextProvider';
+import copyrightRegistryAbi from '../config/copyrightRegistryAbi.json';
 import { useLanguage } from '../context/LanguageContext';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_URL = '/api'; // Aponta para o Proxy do Vercel
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_COPYRIGHT_REGISTRY_ADDRESS || "0x004d593Be1C85b039c17bA421eb6C176bDC926b0"; // Deployed Celo Mainnet address
 
 export const IPForm = () => {
     const { t } = useLanguage();
-    const wallet = useWallet();
-    const { connected, publicKey, signTransaction } = wallet;
-    const { connection } = useConnection();
+    const { connected, address, walletClient, publicClient } = useWeb3();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [status, setStatus] = useState<'idle' | 'analyzing' | 'approved' | 'pending' | 'error' | 'success'>('idle');
@@ -22,7 +20,6 @@ export const IPForm = () => {
     const [similarity, setSimilarity] = useState<number | null>(null);
     const [contentHash, setContentHash] = useState<string>('');
     const [txHash, setTxHash] = useState<string | null>(null);
-    const [requestId, setRequestId] = useState<string | null>(null);
     const [analysisData, setAnalysisData] = useState<any>(null);
 
     const handleVerify = async (e: React.FormEvent) => {
@@ -40,7 +37,7 @@ export const IPForm = () => {
                 body: JSON.stringify({
                     content: content,
                     metadata: { 
-                        author: publicKey?.toBase58(), 
+                        author: address, 
                         title: title,
                         content_hash: generatedHash
                     }
@@ -67,29 +64,39 @@ export const IPForm = () => {
     };
 
     const registerOnChain = async () => {
-        if (!publicKey || !signTransaction || !analysisData) return;
+        if (!address || !walletClient || !publicClient || !analysisData) {
+            alert("Por favor, conecte sua carteira primeiro.");
+            return;
+        }
         
         try {
             setIsRegistering(true);
 
-            const provider = new AnchorProvider(connection, wallet as any, { preflightCommitment: "processed" });
-            const program = new Program(idl as any, provider);
-            const copyrightAccount = web3.Keypair.generate();
+            if (CONTRACT_ADDRESS === "0xaC73C586616053b194d3505c2136000000000000") {
+                console.warn("Usando endereço placeholder do contrato. Certifique-se de configurar NEXT_PUBLIC_COPYRIGHT_REGISTRY_ADDRESS.");
+            }
 
-            const tx = await program.methods
-                .registerCopyright(contentHash, title || "Sem Título", status === 'pending')
-                .accounts({
-                    copyrightAccount: copyrightAccount.publicKey,
-                    user: publicKey,
-                    systemProgram: web3.SystemProgram.programId,
-                } as any)
-                .signers([copyrightAccount])
-                .rpc();
+            console.log("Simulando chamada de contrato no Celo Mainnet...");
+            const { request } = await publicClient.simulateContract({
+                account: address,
+                address: CONTRACT_ADDRESS,
+                abi: copyrightRegistryAbi,
+                functionName: 'registerCopyright',
+                args: [contentHash, title || "Sem Título", status === 'pending'],
+            });
 
-            console.log("Transação confirmada na Solana:", tx);
-            setTxHash(tx);
+            console.log("Enviando transação via Wallet Client...");
+            const hash = await walletClient.writeContract(request);
 
-            // 2. AGORA SIM, criar o registro no MongoDB com o hash real
+            console.log("Transação enviada! Hash no Celo:", hash);
+            
+            console.log("Aguardando confirmação do bloco...");
+            const receipt = await publicClient.waitForTransactionReceipt({ hash });
+            console.log("Transação confirmada no Celo Mainnet!", receipt);
+            
+            setTxHash(hash);
+
+            // 2. Criar o registro no MongoDB no backend com o hash real e o autor EVM
             await fetch(`${API_URL}/confirm`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -98,14 +105,15 @@ export const IPForm = () => {
                     content: analysisData.content,
                     embedding: analysisData.embedding,
                     similarity_score: analysisData.similarity_score,
-                    tx_hash: tx
+                    tx_hash: hash,
+                    author: address
                 })
             });
 
             setStatus('success');
-        } catch (error) {
-            console.error("Erro na transação:", error);
-            alert("Erro ao registrar na Solana. Verifique seu saldo ou o Phantom.");
+        } catch (error: any) {
+            console.error("Erro na transação Celo:", error);
+            alert("Erro ao registrar no Celo Mainnet. Verifique se você está conectado à rede Celo Mainnet e possui saldo de CELO para gás.");
             setStatus('approved');
         } finally {
             setIsRegistering(false);
@@ -132,7 +140,7 @@ export const IPForm = () => {
                             type="text"
                             readOnly
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-indigo-400 font-mono text-sm outline-none cursor-not-allowed"
-                            value={connected && publicKey ? publicKey.toBase58() : 'Conecte sua carteira...'}
+                            value={connected && address ? address : 'Conecte sua carteira...'}
                         />
                     </div>
 
@@ -225,7 +233,7 @@ export const IPForm = () => {
                             </div>
                             <p className="text-sm text-gray-300 mb-6">
                                 Nossa IA verificou que este conteúdo é original (Similaridade: {(similarity! * 100).toFixed(2)}%).
-                                Você já pode registrá-lo na rede Solana.
+                                Você já pode registrá-lo na rede Celo Mainnet.
                             </p>
                             <button 
                                 onClick={registerOnChain}
@@ -233,7 +241,7 @@ export const IPForm = () => {
                                 className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all flex justify-center items-center gap-2"
                             >
                                 {isRegistering ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-                                {isRegistering ? 'Aprovando Transação...' : 'Registrar na Solana (0.002 SOL)'}
+                                {isRegistering ? 'Aprovando Transação...' : 'Registrar na rede Celo'}
                             </button>
                         </motion.div>
                     )}
@@ -249,7 +257,7 @@ export const IPForm = () => {
                                 <h3 className="text-lg font-bold text-white">Análise de Similaridade Alta</h3>
                             </div>
                             <p className="text-sm text-gray-300 mb-6">
-                                Detectamos uma similaridade de **{(similarity! * 100).toFixed(2)}%** com registros existentes.
+                                Detectamos uma similaridade de **{(similarity! * 100).toFixed(2)}%** com registros oficiais existentes.
                                 Seu IP precisa de **Validação Humana** para ser certificado.
                             </p>
                             <button 
@@ -258,7 +266,7 @@ export const IPForm = () => {
                                 className="w-full bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all flex justify-center items-center gap-2"
                             >
                                 {isRegistering ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-                                {isRegistering ? 'Gerando registro pendente...' : 'Pagar taxa e enviar para Auditoria (0.002 SOL)'}
+                                {isRegistering ? 'Gerando registro pendente...' : 'Pagar taxa e enviar para Autoria no Celo'}
                             </button>
                         </motion.div>
                     )}
@@ -274,12 +282,12 @@ export const IPForm = () => {
                                 <h3 className="text-lg font-bold text-white">Registro Concluído!</h3>
                             </div>
                             <p className="text-sm text-gray-300 mb-4">
-                                Seu IP foi gravado eternamente na blockchain da Solana.
+                                Seu IP foi gravado eternamente na blockchain da Celo.
                             </p>
                             <div className="bg-black/40 border border-white/10 rounded-xl p-4 mb-6">
-                                <p className="text-xs text-gray-400 mb-1">Hash da Transação:</p>
+                                <p className="text-xs text-gray-400 mb-1">Hash da Transação (Celo Mainnet):</p>
                                 <a 
-                                    href={`https://explorer.solana.com/tx/${txHash}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899`} 
+                                    href={`https://celoscan.io/tx/${txHash}`} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="text-sm text-indigo-400 hover:text-indigo-300 break-all transition-colors underline"

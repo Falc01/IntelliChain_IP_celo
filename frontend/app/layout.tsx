@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "@solana/wallet-adapter-react-ui/styles.css";
 import { WalletContextProvider } from "./components/WalletContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });

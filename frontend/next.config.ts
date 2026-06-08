@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Ignora erros chatos de ESLint e Typescript durante o deploy
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -18,6 +14,17 @@ const nextConfig = {
     };
     return config;
   },
+  // Desativa o erro do Turbopack no Next 16
+  turbopack: {},
+  // PROXY MAGICO DO VERCEL
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.VPS_API_URL || 'http://localhost:8000'}/:path*` // Roteia tudo que for /api para a VPS
+      }
+    ];
+  }
 };
 
 export default nextConfig;

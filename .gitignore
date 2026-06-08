@@ -15,3 +15,8 @@ backend/.env
 
 # OS Files
 Thumbs.db
+
+# Hardhat / EVM
+contracts/artifacts/
+contracts/cache/
+contracts/.env

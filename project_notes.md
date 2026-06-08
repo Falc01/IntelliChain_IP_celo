@@ -2,45 +2,38 @@
 
 Este documento registra as decisões técnicas, correções e o estado atual do projeto IntelliChain IP.
 
-## 📅 Última Atualização: 09/05/2026
+## 📅 Última Atualização: 11/05/2026
 
-### ✅ Concluído (Sessão Atual)
+### ✅ Concluído (Deploy em Produção)
 
-1. **Refatoração do Fluxo de Registro**:
-   - Otimização da análise de similaridade: agora o sistema **não salva** nada no banco durante a consulta (`/verify`), evitando falsos positivos de 100% (auto-plágio).
-   - O registro no MongoDB agora é atômico e ocorre apenas **após o sucesso** da transação na rede Solana.
-   - O `tx_hash` real da blockchain agora é persistido corretamente no banco de dados junto com os metadados da IP.
+1. **Infraestrutura e Deploy (Nuvem)**:
+   - **Backend (VPS DigitalOcean)**: Configurada VPS com Ubuntu, rodando FastAPI, Docker (MongoDB) e Ollama (IA).
+   - **Frontend (Vercel)**: Deploy efetuado no Vercel com suporte ao Next.js 16. Injetados fallbacks de Webpack para garantir que o pacote `@solana/web3.js` compile corretamente no ambiente Serverless/Edge.
 
-2. **Inteligência Artificial (Ollama)**:
-   - Implementado o uso do modelo `nomic-embed-text` para embeddings de alta precisão.
-   - Adicionada verificação e download automático do modelo no script de inicialização (`start.sh`).
+2. **Arquitetura de Comunicação (Vercel Proxy)**:
+   - **Problema resolvido**: O Cloudflare Tunnel (`trycloudflare`) estava bloqueando requisições da API com telas de "Anti-Bot", gerando falsos erros de CORS e `Failed to fetch`.
+   - **Solução (Vercel Rewrites)**: Criado um proxy reverso no `next.config.ts`. O frontend faz chamadas para a rota relativa `/api/*`, e o servidor do Vercel redireciona secretamente a requisição para o IP público HTTP da VPS (`VPS_API_URL`). Isso eliminou 100% dos erros de CORS e Mixed Content (HTTP vs HTTPS).
 
-3. **Backend (FastAPI & MongoDB)**:
-   - Corrigidos erros de referência ao `ObjectId` (ajuste nos imports do `bson`).
-   - Implementada filtragem na busca de similaridade para ignorar registros que não possuem `tx_hash` (registros órfãos/falhos).
-   - Adicionados logs de depuração para rastreamento de confirmações de transação.
+3. **Internacionalização (i18n)**:
+   - Traduções (PT/EN) aplicadas em todo o sistema.
+   - Refatoradas as páginas estáticas (`DocsPage` e `AdminPage`) para utilizarem o `LanguageContext`, permitindo a troca dinâmica de idiomas em toda a plataforma.
 
-4. **Frontend (Next.js)**:
-   - Re-estruturado o componente `IPForm.tsx` para seguir o novo fluxo: Análise -> Solana -> Persistência.
-   - Restaurada a lógica real do `AdminPage`, conectando o painel de curadoria à API real do backend.
+4. **Refatoração do Fluxo de Registro & IA**:
+   - Análise por IA ocorre primeiro; a persistência no MongoDB e a abertura da carteira Solana (Phantom na Devnet) ocorrem em sequência.
+   - Os testes de similaridade confirmaram a detecção com alta precisão de textos plagiados (encaminhando-os para o Admin).
 
-5. **DevOps & Documentação**:
-   - Criado script `start.sh` robusto para subir todo o ecossistema (Solana, Docker, IA, Backend, Frontend) com um único comando.
-   - Criado `README.md` profissional para o GitHub.
-   - Configurado repositório oficial em `https://github.com/Falc01/IntelliChain_IP.git`.
+### 🛠️ Configuração do Ambiente Atual
 
-### 🛠️ Configuração do Ambiente
+- **Backend**: VPS DigitalOcean (IP Aberto porta 8000), Python 3.10+, FastAPI, Motor (Mongo Async).
+- **Frontend**: Vercel (Production), Next.js 16, Tailwind, Framer Motion, Vercel Rewrites Proxy.
+- **Blockchain**: Solana Devnet Oficial.
+- **IA**: Ollama Local (Modelo `nomic-embed-text`).
 
-- **Backend**: Python 3.10+, FastAPI, Motor (Mongo Async).
-- **Frontend**: Next.js 14, Tailwind, Framer Motion.
-- **Blockchain**: Solana local (Anchor), cluster devnet disponível.
-- **Banco de Dados**: MongoDB via Docker-Compose.
+### 🚀 Próximos Passos (Sugestão Pós-Hackathon)
 
-### 🚀 Próximos Passos (Sugestão)
-
-- [ ] Implementar sistema de login real (além da conexão da carteira).
-- [ ] Criar visualização de certificado de IP para download do usuário.
-- [ ] Migrar para Devnet oficial para o Pitch final.
+- [ ] Implementar sistema de Autenticação Web3 (Sign-in with Solana).
+- [ ] Criar gerador de PDF automatizado para download do certificado de IP registrado.
+- [ ] Otimizar os embeddings de IA para suporte a imagens estruturadas e não apenas texto.
 
 ---
 *Notas mantidas pela equipe de desenvolvimento (Antigravity AI).*

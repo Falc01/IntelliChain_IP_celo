@@ -2,18 +2,13 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { Shield, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-
-// Import dinâmico para evitar erros de Hydration com a carteira
-const WalletMultiButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
-    { ssr: false }
-);
+import { useWeb3 } from './WalletContextProvider';
 
 export const Navbar = () => {
     const { t, language, setLanguage } = useLanguage();
+    const { connected, address, connectWallet, disconnectWallet } = useWeb3();
     const [isLangOpen, setIsLangOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -83,7 +78,22 @@ export const Navbar = () => {
                             )}
                         </div>
 
-                        <WalletMultiButtonDynamic className="!bg-indigo-600 hover:!bg-indigo-700 !transition-all !rounded-lg !h-10 !text-sm" />
+                        {!connected ? (
+                            <button 
+                                onClick={connectWallet}
+                                className="bg-indigo-600 hover:bg-indigo-700 transition-all rounded-lg px-4 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-600/20"
+                            >
+                                {language === 'pt' ? 'Conectar Carteira' : 'Connect Wallet'}
+                            </button>
+                        ) : (
+                            <button 
+                                onClick={disconnectWallet}
+                                className="bg-[#0B0F19] hover:bg-white/10 border border-white/10 transition-all rounded-lg px-4 py-2 text-sm font-mono text-indigo-400 font-bold"
+                                title={language === 'pt' ? 'Clique para desconectar' : 'Click to disconnect'}
+                            >
+                                {address ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}` : 'Conectado'}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
