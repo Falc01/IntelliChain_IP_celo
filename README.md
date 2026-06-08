@@ -9,7 +9,7 @@
 ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝    ╚═╝╚═╝     
 ```
 
-### **Intellectual Property Protection with AI + Solana Blockchain**
+### **Intellectual Property Protection with AI + Celo Blockchain**
 *Every creation is unique. Every record, permanent. Every authorship, proven.*
 
 <br/>
@@ -40,9 +40,9 @@
 
 ## About the Project
 
-**IntelliChain IP** is a next-generation platform for registering and protecting **Intellectual Property (IP)** built on the **Solana** blockchain. The project was born from a real need: the traditional system for registering works and patents is slow, expensive, bureaucratic, and — above all — **does not verify whether the content already exists**.
+**IntelliChain IP** is a next-generation platform for registering and protecting **Intellectual Property (IP)** built on the **Celo** blockchain. The project was born from a real need: the traditional system for registering works and patents is slow, expensive, bureaucratic, and — above all — **does not verify whether the content already exists**.
 
-Our solution addresses this with a powerful hybrid architecture that combines **local Artificial Intelligence** for semantic originality analysis with the immutable power of **Anchor Smart Contracts on Solana** for permanent, tamper-proof registration.
+Our solution addresses this with a powerful hybrid architecture that combines **local Artificial Intelligence** for semantic originality analysis with the immutable power of **Solidity Smart Contracts on Celo** for permanent, tamper-proof registration.
 
 The result? A system that **does not merely register** — it **guarantees** that what is being registered is genuinely original.
 
@@ -55,7 +55,7 @@ The result? A system that **does not merely register** — it **guarantees** tha
 │   ─────────────────────         ────────────────────────     │
 │   ✗ Months of waiting    →      ✅ Registered in minutes    │
 │   ✗ No originality check →      ✅ AI validates content     │
-│   ✗ Expensive & slow     →      ✅ Minimal cost (Solana)    │
+│   ✗ Expensive & slow     →      ✅ Minimal cost (Celo)      │
 │   ✗ Centralized          →      ✅ Decentralized & immutable│
 │   ✗ Opaque process       →      ✅ Transparent & auditable  │
 │                                                              │
@@ -86,8 +86,8 @@ Before any registration, the content goes through a **semantic analysis pipeline
 
 ---
 
-### Immutable Registration on Solana
-IPs approved by the AI analysis are registered on-chain via **Anchor Smart Contracts**. The cryptographic hash of the content and authorship metadata are recorded with a permanent, immutable timestamp, generating **irrefutable proof of prior art**.
+### Immutable Registration on Celo
+IPs approved by the AI analysis are registered on-chain via **Solidity Smart Contracts**. The cryptographic hash of the content and authorship metadata are recorded with a permanent, immutable timestamp on the Celo Mainnet, generating **irrefutable proof of prior art**.
 
 > Once on the blockchain, **no one can delete or alter it**.
 
@@ -108,7 +108,7 @@ Even while an IP is under human review, the system records a **pending transacti
 ---
 
 ### Premium Interface
-High-fidelity UI built with **Next.js 14**, **Tailwind CSS**, **Framer Motion**, and **Lucide Icons** — with full focus on user experience and interaction fluidity.
+High-fidelity UI built with **Next.js 16**, **Tailwind CSS**, **Framer Motion**, and **Lucide Icons** — with full focus on user experience and interaction fluidity.
 
 > Because protecting your creation should be as elegant as creating it.
 
@@ -124,7 +124,7 @@ IntelliChain IP deliberately separates **analysis** from **registration**, optim
 │                                                                          │
 │  ┌─────────────┐    ┌──────────────────────────────────────────────┐     │
 │  │    USER     │───▶│               FRONTEND                       │    │
-│  │             │    │          Next.js 14 + Tailwind                │    │
+│  │             │    │          Next.js 16 + Tailwind                │    │
 │  └─────────────┘    └───────────────────┬──────────────────────────┘     │
 │                                         │                                │
 │                                         ▼                                │
@@ -135,21 +135,21 @@ IntelliChain IP deliberately separates **analysis** from **registration**, optim
 │                            │                │                            │
 │              ┌─────────────▼──┐    ┌────────▼────────────┐               │
 │              │   AI / ML      │    │      MONGODB        │               │
-│  OFF-CHAIN   │  Semantic      │    │  Metadata + Vectors │               │
-│  (Analysis)  │  Embeddings    │    │  of Similarity      │               │
-│              └────────┬───────┘    └─────────────────────┘               │
+│              │  Semantic      │    │  Metadata + Vectors │               │
+│  OFF-CHAIN   │  Embeddings    │    │  of Similarity      │               │
+│  (Analysis)  └────────┬───────┘    └─────────────────────┘               │
 │                       │                                                  │
 │                       │  ✅ Approved        ⚖️ Human Review             │
 │                       ▼                                                  │
 │              ┌─────────────────────────────────────────────┐             │
 │              │           SMART CONTRACTS                   │             │
-│  ON-CHAIN    │          Anchor Framework                    │            │
-│  (Proof)     └──────────────────┬──────────────────────────┘             │
-│                                 │                                        │
+│              │       Solidity (Hardhat Compiler)           │             │
+│  ON-CHAIN    └──────────────────┬──────────────────────────┘             │
+│  (Proof)                        │                                        │
 │                                 ▼                                        │
 │              ┌─────────────────────────────────────────────┐             │
-│              │            SOLANA BLOCKCHAIN                │             │
-│              │     Hash + Metadata + Immutable Timestamp   │             │
+│              │             CELO BLOCKCHAIN                 │             │
+│              │   Hash + Metadata + Immutable Timestamp     │             │
 │              └─────────────────────────────────────────────┘             │
 │                                                                          │
 └──────────────────────────────────────────────────────────────────────────┘
@@ -168,11 +168,11 @@ IntelliChain IP deliberately separates **analysis** from **registration**, optim
 ### Frontend
 | Technology | Version | Role |
 |-----------|---------|------|
-| **Next.js** | 14 | React framework with SSR/SSG |
-| **Tailwind CSS** | 3.x | Utility-first styling |
-| **Framer Motion** | Latest | Animations and transitions |
+| **Next.js** | 16 | React framework with SSR/SSG |
+| **Tailwind CSS** | 4.x | Utility-first styling |
+| **Framer Motion** | 12.x | Animations and transitions |
 | **Lucide Icons** | Latest | Iconography |
-| **@solana/web3.js** | Latest | Solana wallet integration |
+| **viem** | Latest | Lightweight EVM integration for Celo wallet |
 
 ### Backend
 | Technology | Version | Role |
@@ -184,22 +184,17 @@ IntelliChain IP deliberately separates **analysis** from **registration**, optim
 ### AI / ML
 | Technology | Role |
 |-----------|------|
-| **Local Embeddings** | Semantic vector generation from content |
+| **Local Embeddings** | Semantic vector generation from content (nomic-embed-text) |
 | **Cosine Similarity** | Mathematical comparison between works |
 | **Curation Pipeline** | Intelligent Human-in-the-Loop routing |
 
-### Web3 / Blockchain
+### Web3 / Smart Contracts
 | Technology | Role |
 |-----------|------|
-| **Solana** | Primary blockchain network |
-| **Anchor Framework** | Smart contract development |
-| **@solana/web3.js** | Frontend/blockchain integration SDK |
-
-### Database & Infrastructure
-| Technology | Role |
-|-----------|------|
-| **MongoDB** | Metadata and vector persistence |
-| **IPFS** *(planned)* | Decentralized document storage |
+| **Celo** | Primary blockchain network (Mainnet / Alfajores) |
+| **Hardhat** | Smart contract compiler, test suite and deploy framework |
+| **Solidity** | Smart contract language (`0.8.20`) |
+| **viem** | Client side contract interaction interface |
 
 ---
 
@@ -214,13 +209,13 @@ IntelliChain IP deliberately separates **analysis** from **registration**, optim
                                                       ▼
                         Score > threshold?    4. REGISTRATION
                         ⚖️ Human        ───▶  Hash recorded
-                           Curation           on Solana via
-                              │               Anchor + timestamp
+                           Curation           on Celo Blockchain
+                              │               via Smart Contract
                               ▼
                         Admin decides:   5. CERTIFICATE
                         ✅ Approve  ───▶  User receives
                         ❌ Reject        digital certificate
-                                         with TX hash
+                                         with Celo TX hash
 ```
 
 ---
@@ -233,24 +228,25 @@ The fastest way to run IntelliChain IP locally. A single script launches **all s
 
 Before you begin, make sure you have installed:
 
-- [Node.js](https://nodejs.org) `18+`
+- [Node.js](https://nodejs.org) `18+` (running in WSL/Linux)
 - [Python](https://python.org) `3.10+`
-- [Solana CLI](https://docs.solana.com/cli/install-solana-cli-tools)
-- [Anchor CLI](https://www.anchor-lang.com/docs/installation)
-- [MongoDB](https://www.mongodb.com/try/download/community) `(running locally)`
+- [Docker & Docker-Compose](https://docs.docker.com/) (for MongoDB container)
 
 ### Installation
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/intellichain-ip.git
-cd intellichain-ip
+git clone https://github.com/Falc01/IntelliChain_IP_celo.git
+cd IntelliChain_IP_celo
 
 # 2. Install Frontend dependencies
 cd frontend && npm install && cd ..
 
 # 3. Install Backend dependencies
 cd backend && pip install -r requirements.txt && cd ..
+
+# 4. Install Contracts dependencies
+cd contracts && npm install && cd ..
 ```
 
 ### Full Startup
@@ -261,28 +257,17 @@ chmod +x start.sh
 ./start.sh
 ```
 
-The `start.sh` script will, in order:
-
-- ✅ Start the **local Solana validator** (`solana-test-validator`)
-- ✅ **Deploy the Smart Contracts** via Anchor
-- ✅ Launch the **FastAPI server** (Backend)
-- ✅ Start the **Next.js** development server (Frontend)
-
-> ⚠️ **Warning**: Make sure **MongoDB is running** on your machine before executing the script.
-
 Once initialized, access: **[http://localhost:3000](http://localhost:3000)**
 
 ---
 
 ## Manual Setup
 
-Prefer to run each service individually? No problem.
-
 ### Backend (FastAPI)
 
 ```bash
 cd backend
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+./venv/bin/python -m uvicorn app.main:app --reload
 ```
 
 > API available at: `http://localhost:8000`
@@ -297,69 +282,38 @@ npm run dev
 
 > Interface available at: `http://localhost:3000`
 
-### Blockchain (Local Solana)
+### Blockchain / Smart Contracts (Hardhat)
 
 ```bash
-# Terminal 1 — Start the local validator
-solana-test-validator
+cd contracts
 
-# Terminal 2 — Build and deploy contracts
-anchor build
-anchor deploy
+# Compile Solidity contracts
+npx hardhat compile
+
+# Run smart contract tests
+npx hardhat test
+
+# Deploy to Celo Mainnet (needs PRIVATE_KEY inside contracts/.env)
+npx hardhat run scripts/deploy.js --network mainnet
 ```
 
 ---
 
 ## Environment Variables
 
-Create a `.env` file inside the `/backend` folder with the following variables:
+Create a `.env` file inside `/contracts` with the following:
 
 ```env
-# ── Database ────────────────────────────────────────────
-MONGODB_URI=mongodb://localhost:27017/intellichain
-
-# ── Blockchain ──────────────────────────────────────────
-SOLANA_NETWORK=http://127.0.0.1:8899
-SOLANA_KEYPAIR_PATH=~/.config/solana/id.json
-
-# ── AI / ML ─────────────────────────────────────────────
-EMBEDDING_MODEL=local
-SIMILARITY_THRESHOLD=0.85        # Threshold for automatic approval
-REVIEW_THRESHOLD=0.70            # Threshold for human curation routing
-
-# ── API ─────────────────────────────────────────────────
-API_HOST=0.0.0.0
-API_PORT=8000
-DEBUG=true
+PRIVATE_KEY=0x...   # Private key of your deployer wallet containing CELO
 ```
 
----
+Create a `.env` file inside `/backend` with:
 
-## Documentation
-
-The project includes a **dedicated technical documentation page integrated into the frontend**, accessible at `/docs`, covering:
-
-- Complete breakdown of each step in the registration process
-- Criteria and thresholds used by the AI analysis
-- REST API reference (endpoints, payloads, responses)
-- Integration guide via open API for developers
-- Explanation of the Human-in-the-Loop curation model
-
-> **Swagger UI** (Backend): `http://localhost:8000/docs`
-> **ReDoc** (Backend): `http://localhost:8000/redoc`
-
----
-
-## Team
-
-This project was built by a team passionate about technology, innovation, and real-world impact.
-
-| Name | Role |
-|------|------|
-| **Everton Santos** | Tech Leader — Architecture, technical strategy, and product vision |
-| **JoaoF (Falc01)** | Full-Stack Developer — AI + Web3 integration, Backend and Frontend |
-
-> Built as a **Hackathon project** and **PoC (Proof of Concept)** for advanced AI + Web3 integration.
+```env
+MONGO_URL=mongodb://localhost:27017
+OLLAMA_MODEL=nomic-embed-text
+PORT=8000
+```
 
 ---
 
@@ -368,9 +322,9 @@ This project was built by a team passionate about technology, innovation, and re
 ```
 PHASE 1 — MVP (Current) ✅
 ├── AI-powered originality verification (Embeddings)
-├── Immutable registration on Solana (Anchor)
+├── Immutable registration on Celo Mainnet (Solidity)
 ├── Human-in-the-Loop curation flow
-├── Pay-to-Audit with immediate TX hash
+├── Pay-to-Audit with immediate Celo TX hash
 └── Next.js UI with Framer Motion
 
 PHASE 2 — Expansion 🔄
@@ -380,10 +334,9 @@ PHASE 2 — Expansion 🔄
 └── Analytics dashboard for creators
 
 PHASE 3 — Scale 🌐
-├── Deploy to Solana Mainnet
-├── Licensing marketplace with Smart Contracts
+├── Advanced licensing marketplace
 ├── Compliance with international IP regulations
-└── Mobile app (React Native)
+└── Mobile app (React Native / MiniPay integration)
 ```
 
 ---
@@ -391,17 +344,3 @@ PHASE 3 — Scale 🌐
 ## License
 
 Distributed under the **MIT License**. See the [LICENSE](LICENSE) file for more details.
-
----
-
-<div align="center">
-
-<br/>
-
-**IntelliChain IP** — *Built with purpose. Recorded forever.*
-
-<br/>
-
-*"Changing the world through technology and sustainability."*
-
-</div>
