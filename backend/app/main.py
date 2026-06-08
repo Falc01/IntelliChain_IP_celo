@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="IntelliChain IP Backend",
-    description="API para validação de Propriedade Intelectual via IA e sincronização com Solana",
+    description="API para validação de Propriedade Intelectual via IA e sincronização com Celo",
     version="0.1.0",
     lifespan=lifespan
 )
@@ -115,7 +115,7 @@ async def verify_ip(ip: IPContent):
 
 @app.post("/confirm")
 async def confirm_registration(data: dict):
-    """Salva o registro no MongoDB apenas após o sucesso na Solana."""
+    """Salva o registro no MongoDB apenas após o sucesso na Celo."""
     import datetime
     try:
         # Log para depuração
