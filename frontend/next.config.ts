@@ -3,7 +3,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Ensina o Vercel a lidar com as dependências "pesadas" da Solana
+  // Configuração de fallbacks de pacotes do Node.js para compatibilidade no navegador
   webpack: (config: any) => {
     config.resolve.fallback = {
       fs: false,

@@ -140,7 +140,7 @@ export const WalletContextProvider: FC<{ children: ReactNode }> = ({ children })
         }
     }, []);
 
-    // Solana compatibility mapping:
+    // EVM to Solana-like public key compatibility mapping (keeps existing components compatible):
     const publicKey = address
         ? {
               toBase58: () => address,

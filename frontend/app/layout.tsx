@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "IntelliChain IP | Registro de Propriedade Intelectual",
-  description: "Proteja sua criação na Solana com validação inteligente por IA.",
+  description: "Proteja sua criação na Celo com validação inteligente por IA.",
 };
 
 import { LanguageProvider } from "./context/LanguageContext";

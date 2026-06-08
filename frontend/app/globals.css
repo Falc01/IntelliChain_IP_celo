@@ -39,23 +39,4 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Solana Wallet Button Overrides */
-.wallet-adapter-button {
-  font-family: inherit !important;
-  font-weight: 600 !important;
-}
 
-.wallet-adapter-button-trigger {
-  background-color: #6366f1 !important;
-  border-radius: 8px !important;
-}
-
-.wallet-adapter-modal-wrapper {
-  background: #111 !important;
-  color: white !important;
-  border: 1px solid #333 !important;
-}
-
-.wallet-adapter-modal-button-close {
-  background: #222 !important;
-}

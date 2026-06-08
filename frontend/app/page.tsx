@@ -29,7 +29,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500/50" />
-              <span className="text-sm">Velocidade Solana</span>
+              <span className="text-sm">Velocidade Celo</span>
             </div>
             <div className="flex items-center gap-2">
               <Globe className="w-5 h-5 text-blue-500/50" />

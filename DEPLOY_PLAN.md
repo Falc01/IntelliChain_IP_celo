@@ -1,14 +1,14 @@
-# Estratégia de Deploy: IntelliChain IP (Hackathon Edition)
+# Estratégia de Deploy: IntelliChain IP (Celo Edition)
 
-Este documento detalha a arquitetura de implantação da plataforma IntelliChain IP. O objetivo é garantir um ambiente estável, seguro e profissional para o Hackathon, mantendo os custos em absoluto **zero** através do uso estratégico de serviços.
+Este documento detalha a arquitetura de implantação da plataforma IntelliChain IP na rede Celo. O objetivo é garantir um ambiente estável, seguro e profissional, mantendo os custos sob controle.
 
 ## 1. Por que dividir em Vercel e VPS?
 
 Uma dúvida comum é: *"Se temos uma VPS, por que não hospedar tudo nela?"*
 
-A resposta envolve **Segurança, UX e as regras da Solana**:
-- **Carteiras Web3 (ex: Phantom)**: Elas exigem conexões seguras via `HTTPS` para funcionar corretamente. 
-- **O Vercel (Frontend)**: Hospeda nosso site (Next.js) gratuitamente, fornece um domínio amigável (ex: `intellichain.vercel.app`) e aplica um certificado `HTTPS` automático e gratuito. Isso garante que a Phantom conecte sem erros e a interface pareça extremamente profissional.
+A resposta envolve **Segurança, UX e as regras da Celo**:
+- **Carteiras Web3 (ex: MetaMask, Valora, MiniPay)**: Elas exigem conexões seguras via `HTTPS` para funcionar corretamente. 
+- **O Vercel (Frontend)**: Hospeda nosso site (Next.js) de forma rápida e segura, fornece um domínio amigável (ex: `intellichain.vercel.app`) e aplica um certificado `HTTPS` automático e gratuito. Isso garante que as carteiras conectem sem erros e a interface pareça extremamente profissional.
 - **A VPS (Backend + Banco + IA)**: O Vercel não suporta Inteligência Artificial rodando localmente (Ollama) nem Banco de Dados. Por isso, a VPS fará o "trabalho pesado" nos bastidores.
 
 ## 2. O Perigo Oculto: Erro de "Mixed Content"
@@ -32,21 +32,9 @@ O uso de IA não precisa ser caro. Graças à escolha do modelo `nomic-embed-tex
 
 ### 🏆 Hospedagem Recomendada: DigitalOcean
 
-Para este Hackathon, a **DigitalOcean** é a nossa escolha principal por dois motivos:
-1. **Velocidade e Praticidade**: A interface é incrivelmente simples. Criamos um "Droplet" (servidor Ubuntu) em menos de 1 minuto.
-2. **Custo ZERO**: A DigitalOcean oferece **$200 de crédito gratuito** (válido por 60 dias) para novas contas (basta procurar um link padrão de afiliados no Google/YouTube). 
-
-> [!TIP]
-> **Ação para a Equipe:** Criem uma conta na DigitalOcean e ativem os $200 de crédito. A máquina Basic de 2GB RAM ($12/mês) será mais do que suficiente e sairá totalmente de graça.
-
-### Alternativa 2: Hetzner Cloud (O Mais Barato 💶)
-- **Instância**: CPX11 (2 vCPUs, 2GB RAM, 40GB NVMe)
-- **Preço**: ~ €4.15 / mês (Menos de $5)
-- **Veredito**: Se vocês não quiserem depender de créditos ou planejam manter o projeto no ar após o evento pagando do próprio bolso, a Hetzner tem o melhor preço do mercado, embora a criação da conta possa exigir verificação de identidade.
-
-### Alternativa 3: Vultr / Linode
-- **Preço/Setup**: Idêntico à DigitalOcean ($12/mês, instâncias fáceis de criar e costumam ter cupons de $100 gratuitos para teste).
-- **Veredito**: Excelente plano B caso encontrem problemas para validar a conta na DigitalOcean.
+Para a implantação, a **DigitalOcean** é uma escolha excelente:
+1. **Velocidade e Praticidade**: A interface é simples. Criamos um "Droplet" (servidor Ubuntu) rapidamente.
+2. **Custo Acessível**: É possível utilizar créditos iniciais gratuitos ou usar instâncias de baixo custo ($6-$12/mês).
 
 ---
 
@@ -54,20 +42,23 @@ Para este Hackathon, a **DigitalOcean** é a nossa escolha principal por dois mo
 
 Dividiremos a execução técnica nas seguintes etapas:
 
-### Etapa 1: Smart Contract (Solana Devnet)
-- Atualizar o ambiente do Anchor para `devnet`.
-- Obter Airdrop de moedas fictícias (SOL) para pagar as taxas.
-- Realizar o `anchor deploy` do contrato inteligente.
-- Atualizar o Frontend com o novo endereço do contrato.
+### Etapa 1: Smart Contract (Celo Mainnet / Testnet)
+- Configurar o Hardhat com a rede Celo (`hardhat.config.js`).
+- Obter saldo em CELO na carteira para pagar o gás do deploy.
+- Executar o script de implantação:
+  ```bash
+  npx hardhat run scripts/deploy.js --network celo
+  ```
+- Atualizar o endereço do contrato no Frontend (`IPForm.tsx`).
 
 ### Etapa 2: Servidor (VPS DigitalOcean)
 - Criar o Droplet (Ubuntu 24.04).
 - Acessar o servidor via SSH.
-- Clonar o repositório do projeto (`Falc01/IntelliChain_IP`).
-- Executar nosso script automatizado `start.sh` (Sobe o Docker do MongoDB, Ollama e FastAPI juntos).
+- Clonar o repositório do projeto (`Falc01/IntelliChain_IP_celo`).
+- Executar o script de inicialização do backend (Docker MongoDB + Ollama + FastAPI).
 - Instalar e rodar o Cloudflare Tunnel / Ngrok para gerar o link `HTTPS` do backend.
 
 ### Etapa 3: Interface (Vercel)
 - Conectar a conta do Vercel ao repositório no GitHub.
-- Configurar as Variáveis de Ambiente (`NEXT_PUBLIC_API_URL`) para apontar para o link seguro gerado na Etapa 2.
+- Configurar a variável `VPS_API_URL` para fazer os rewrites automáticos de `/api/*`.
 - Publicar a aplicação!
